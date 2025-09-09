@@ -29,7 +29,7 @@ Los clientes podrán:
 
 ---
 
-## 🧩 Flujo de trabajo con Git
+## :jigsaw: Flujo de trabajo con Git
 
 **1. Ramas utilizadas**
 
