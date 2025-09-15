@@ -32,7 +32,7 @@ Los clientes podrán:
 ## 📋 Responsabilidades
 
 | Nombre |  Rol  | Funciones | 
-|:-----|:--------:| |:--------:|
+|:-----|:--------:|:--------:|
 | Abraham Vergara   | Full Stack | Gestionar todo el ciclo de vida del desarrollo.|
 | Angel Salazar   | Backend|Crear y gestionar servicios backend para que se comunique de manera eficiente con el servidor.|
 | Erixon Castillo   | Full Stack |Desarrollar tanto el frontend como el backend.|
