@@ -29,6 +29,19 @@ Los clientes podrán:
 
 ---
 
+## 📋 Responsabilidades
+
+| Miembro del equipo |  Rol  |
+|:-----|:--------:|
+| Abraham Vergara   | Full Stack |
+| Angel Salazar   | Backend|
+| Erixon Castillo   | Full Stack |
+| Francis Moreno   |  Frontend |
+| Samanta Cordova   | Full Stack |
+
+
+---
+
 ## :jigsaw: Flujo de trabajo con Git
 
 **1. Ramas utilizadas**
