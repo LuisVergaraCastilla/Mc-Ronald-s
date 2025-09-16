@@ -7,7 +7,7 @@ Los clientes podrán:
 - Visualizar el menú con promociones y productos disponibles.
 - Realizar un pedido como **invitado** (solo colocando su nombre).
 - Pagar con **tarjeta** o **Yape**.
-- Entrega de su boleta y recibir su orden en caja cuando esté lista.
+- Entrega de su boleta o factura y recibir su orden en caja cuando esté lista.
 
 - Además, el sistema incluye dos roles principales:
 - **Administrador (ADMIN)**  
