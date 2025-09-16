@@ -56,15 +56,16 @@ Los clientes podrán:
 #### Ejemplo
   ```bash
   git checkout -b feature/whatsapp-code
+  ```
 <img width="940" height="166" alt="image" src="https://github.com/user-attachments/assets/87dfbc82-0295-4297-908c-bb635671ff3e" />
 
-  ```
+  
 #### Ejemplo
   ```bash
   git checkout -b hotfix/security
+  ```
 <img width="940" height="158" alt="image" src="https://github.com/user-attachments/assets/e4e8897a-4025-4173-9b67-152711928d4b" />
 
-  ```
 
 **2. Commits**
 - Commits atómicos y descriptivos..
@@ -134,10 +135,8 @@ Al intentar fusionar `feature/gestion-usuarios` con `develop`, hubo un conflicto
   git log
   ```
 #### Muestra:
-  ```bash
   <img width="771" height="944" alt="image" src="https://github.com/user-attachments/assets/25d6a5e9-989e-4891-b9de-433e26dc664f" />
-
-  ```
+  
 **7.Historial de cabeceras**
   ```bash
   git reflog
