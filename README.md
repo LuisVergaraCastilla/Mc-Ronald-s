@@ -138,3 +138,24 @@ Al intentar fusionar `feature/gestion-usuarios` con `develop`, hubo un conflicto
 h7i8j9k HEAD@{1}: commit: feat: agregar login con JWT
 l0m1n2o HEAD@{2}: commit (initial): init: configuración inicial de Spring Boot
   ```
+
+---
+
+## 🔷 Estructura de backend
+
+<img width="361" height="602" alt="Image" src="https://github.com/user-attachments/assets/3b05aa64-4a79-4741-917b-c537643ea0e5" />
+
+
+---
+
+## 🔶 Estructura de frontend
+
+<img width="291" height="552" alt="Image" src="https://github.com/user-attachments/assets/093e102f-d0e6-4bf4-a79e-e1bb19c95917" />
+
+
+---
+
+## 💻 Base de datos
+
+<img width="1237" height="178" alt="Image" src="https://github.com/user-attachments/assets/5865f2ad-a588-47a7-aeda-430509c6ec32" />
+
