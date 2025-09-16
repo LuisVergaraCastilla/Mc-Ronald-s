@@ -168,3 +168,6 @@ l0m1n2o HEAD@{2}: commit (initial): init: configuración inicial de Spring Boot
 
 <img width="1237" height="178" alt="Image" src="https://github.com/user-attachments/assets/5865f2ad-a588-47a7-aeda-430509c6ec32" />
 
+<img width="1031" height="689" alt="image" src="https://github.com/user-attachments/assets/ba079eee-7141-413b-85f6-23d41c79ff85" />
+
+
