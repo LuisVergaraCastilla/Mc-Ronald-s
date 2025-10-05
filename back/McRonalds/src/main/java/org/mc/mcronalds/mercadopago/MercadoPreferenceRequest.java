@@ -5,14 +5,14 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class PreferenceRequest {
-    private String idProducto;
-    private String titulo;
-    private String descripcion;
+public class MercadoPreferenceRequest {
+    private String id;
+    private String title;
+    private String description;
     private String pictureUrl;
-    private String categoria;
-    private int cantidad;
-    private BigDecimal precio;
-    private String moneda;
+    private String categoryId;
+    private int quantity;
+    private BigDecimal unitPrice;
+    private String currencyId;
 
 }
