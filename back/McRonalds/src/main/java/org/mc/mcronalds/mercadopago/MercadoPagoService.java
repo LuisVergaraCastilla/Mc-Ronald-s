@@ -52,7 +52,7 @@ public class MercadoPagoService {
                 .notificationUrl(notificationUrl)
                 .externalReference(mercadoPreferenceRequest.getId());
 
-        // Mercado Pago requiere back_urls.success válido para usar auto_return; evita localhost
+                
         if (backUrlSuccess != null && !backUrlSuccess.isBlank() && !backUrlSuccess.contains("localhost")) {
             builder.autoReturn("approved");
         }
