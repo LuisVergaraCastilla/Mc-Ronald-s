@@ -7,7 +7,7 @@ Los clientes podrán:
 - Visualizar el menú con promociones y productos disponibles.
 - Realizar un pedido como **invitado** (solo colocando su nombre).
 - Pagar con **tarjeta** o **Yape**.
-- Entrega de su boleta y recibir su orden en caja cuando esté lista.
+- Entrega de su boleta o factura y recibir su orden en caja cuando esté lista.
 
 - Además, el sistema incluye dos roles principales:
 - **Administrador (ADMIN)**  
@@ -48,15 +48,24 @@ Los clientes podrán:
 
 - `main` → Rama estable, lista para producción.
 
-- `develop` → Rama de desarrollo.
+- `develop-Nombre` → Rama de desarrollo.
 
 - `feature/nombre` → Para nuevas funcionalidades.
 
 - `fix/nombre` → Para correcciones de errores.
 #### Ejemplo
   ```bash
-  git checkout -b feature/gestion-usuarios
+  git checkout -b feature/whatsapp-code
   ```
+<img width="940" height="166" alt="image" src="https://github.com/user-attachments/assets/87dfbc82-0295-4297-908c-bb635671ff3e" />
+
+  
+#### Ejemplo
+  ```bash
+  git checkout -b hotfix/security
+  ```
+<img width="940" height="158" alt="image" src="https://github.com/user-attachments/assets/e4e8897a-4025-4173-9b67-152711928d4b" />
+
 
 **2. Commits**
 - Commits atómicos y descriptivos..
@@ -92,14 +101,18 @@ Durante el desarrollo se documentaron los siguientes comandos:
 
 **4. Pull Request (PR) / Merge Request (MR)**
 
-Se generó una Pull Request desde `feature/gestion-usuarios` hacia `develop.`
+Se generó una Pull Request desde `develop-angel` hacia `main.`
 - Descripción clara del cambio.
 
 - Checklist de revisión.
 
 - Revisión y aprobación antes de hacer merge.
 
+  <img width="886" height="406" alt="image" src="https://github.com/user-attachments/assets/dbc4c276-ede4-4f7f-927d-0b0dcab030d8" />
+
+
 **5. Resolución de Conflictos**
+Ejemplo:
 
 Al intentar fusionar `feature/gestion-usuarios` con `develop`, hubo un conflicto en:
 
@@ -119,15 +132,11 @@ Al intentar fusionar `feature/gestion-usuarios` con `develop`, hubo un conflicto
 
 #### Ejemplo de salida:
   ```bash
-  git log --oneline --graph
+  git log
   ```
-#### Simulación:
-  ```bash
-  * a1b2c3d (HEAD -> develop) feat: agregar CRUD de menú
-  * d4e5f6g fix: corregir error en validación de usuario
-  * h7i8j9k feat: agregar login con JWT
-  * l0m1n2o init: configuración inicial de Spring Boot
-  ```
+#### Muestra:
+  <img width="771" height="944" alt="image" src="https://github.com/user-attachments/assets/25d6a5e9-989e-4891-b9de-433e26dc664f" />
+  
 **7.Historial de cabeceras**
   ```bash
   git reflog
@@ -158,4 +167,7 @@ l0m1n2o HEAD@{2}: commit (initial): init: configuración inicial de Spring Boot
 ## 💻 Base de datos
 
 <img width="1237" height="178" alt="Image" src="https://github.com/user-attachments/assets/5865f2ad-a588-47a7-aeda-430509c6ec32" />
+
+<img width="1031" height="689" alt="image" src="https://github.com/user-attachments/assets/ba079eee-7141-413b-85f6-23d41c79ff85" />
+
 
