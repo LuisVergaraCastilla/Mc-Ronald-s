@@ -174,6 +174,12 @@ public class MercadoPagoController {
         
         return ResponseEntity.ok(message);
     }
+
+    @GetMapping
+    public ResponseEntity<String> base() {
+        return ResponseEntity.ok("MercadoPago API activa");
+    }
+
 }
 
 

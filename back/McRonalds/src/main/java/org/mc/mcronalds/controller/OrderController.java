@@ -167,7 +167,7 @@ public class OrderController {
                 order.setStatus(newStatus);
                 
                 // Actualizar tiempo real si se está completando
-                if (newStatus == OrderStatus.COMPLETED) {
+                if (newStatus == OrderStatus.CONFIRMED) {
                     order.setActualTime(System.currentTimeMillis() - order.getOrderDate().atZone(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli());
                 }
                 
