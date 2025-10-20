@@ -49,6 +49,7 @@ Los commits deben ser claros, específicos y en tiempo presente, por ejemplo nue
 
 ## Reglas para Pull Requests (PR)
 Antes de fusionar (merge) una rama a develop o main, deben cumplirse los siguientes requisitos:
+
 ✅ El código debe compilar correctamente.
 
 ✅ Todas las pruebas deben pasar exitosamente.
