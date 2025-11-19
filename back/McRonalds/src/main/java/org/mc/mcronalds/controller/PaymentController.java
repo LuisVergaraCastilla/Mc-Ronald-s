@@ -1,13 +1,22 @@
 package org.mc.mcronalds.controller;
 
 import org.mc.mcronalds.model.Payment;
+import org.mc.mcronalds.model.PaymentStatus;
+import org.mc.mcronalds.model.Order;
 import org.mc.mcronalds.repository.PaymentRepository;
+import org.mc.mcronalds.repository.OrderRepository;
+import org.mc.mcronalds.mercadopago.MercadoPagoService;
+import org.mc.mcronalds.mercadopago.MercadoPreferenceRequest;
+import com.mercadopago.resources.preference.Preference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Map;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/payments")
@@ -15,6 +24,12 @@ public class PaymentController {
 
     @Autowired
     private PaymentRepository paymentRepository;
+    
+    @Autowired
+    private OrderRepository orderRepository;
+    
+    @Autowired
+    private MercadoPagoService mercadoPagoService;
 
     // Obtener todos los pagos
     @GetMapping
@@ -58,6 +73,154 @@ public class PaymentController {
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    // Obtener pagos por order ID
+    @GetMapping("/order/{orderId}")
+    public ResponseEntity<List<Payment>> getPaymentsByOrder(@PathVariable Long orderId) {
+        Optional<Order> order = orderRepository.findById(orderId);
+        if (order.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        List<Payment> payments = paymentRepository.findByOrder(order.get());
+        return ResponseEntity.ok(payments);
+    }
+
+    // Obtener pagos por estado
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<Payment>> getPaymentsByStatus(@PathVariable PaymentStatus status) {
+        List<Payment> payments = paymentRepository.findByPaymentStatus(status);
+        return ResponseEntity.ok(payments);
+    }
+
+    // Crear preferencia de pago para una orden
+    @PostMapping("/create-preference/{orderId}")
+    public ResponseEntity<?> createPaymentPreference(@PathVariable Long orderId) {
+        try {
+            Optional<Order> orderOpt = orderRepository.findById(orderId);
+            if (orderOpt.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            Order order = orderOpt.get();
+            
+            // Verificar si ya existe un pago pendiente para esta orden
+            List<Payment> existingPayments = paymentRepository.findByOrder(order);
+            for (Payment existingPayment : existingPayments) {
+                if (existingPayment.getPaymentStatus() == PaymentStatus.PENDING) {
+                    // Si ya existe un pago pendiente, retornar la preferencia existente
+                    Map<String, Object> response = new HashMap<>();
+                    response.put("preference_id", existingPayment.getTransactionId());
+                    response.put("init_point", "https://www.mercadopago.com.pe/checkout/v1/redirect?pref_id=" + existingPayment.getTransactionId());
+                    response.put("sandbox_init_point", "https://sandbox.mercadopago.com.pe/checkout/v1/redirect?pref_id=" + existingPayment.getTransactionId());
+                    response.put("payment_id", existingPayment.getIdPayment());
+                    response.put("message", "Ya existe un pago pendiente para esta orden");
+                    return ResponseEntity.ok(response);
+                }
+            }
+            
+            // Crear request para MercadoPago
+            MercadoPreferenceRequest request = new MercadoPreferenceRequest();
+            request.setId(order.getIdOrder().toString());
+            request.setTitle("Orden McRonalds #" + order.getIdOrder());
+            request.setDescription("Pago de orden del " + order.getOrderDate());
+            request.setQuantity(1);
+            request.setUnitPrice(order.getTotalAmount());
+            request.setCurrencyId("PEN");
+
+            // Crear preferencia en MercadoPago
+            Preference preference = mercadoPagoService.createPreference(request);
+            
+            // Crear registro de pago en base de datos ANTES de retornar la respuesta
+            Payment payment = Payment.builder()
+                    .order(order)
+                    .amount(order.getTotalAmount())
+                    .paymentMethod("MERCADOPAGO")
+                    .paymentStatus(PaymentStatus.PENDING)
+                    .transactionId(preference.getId())
+                    .paymentDate(LocalDateTime.now())
+                    .build();
+            
+            // Guardar el pago en la base de datos
+            Payment savedPayment = paymentRepository.save(payment);
+            System.out.println("✅ Payment creado en BD con ID: " + savedPayment.getIdPayment() + " para orden: " + orderId);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("preference_id", preference.getId());
+            response.put("init_point", preference.getInitPoint());
+            response.put("sandbox_init_point", preference.getSandboxInitPoint());
+            response.put("payment_id", savedPayment.getIdPayment());
+            response.put("external_reference", order.getIdOrder().toString());
+            
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            System.err.println("❌ Error al crear preferencia de pago: " + e.getMessage());
+            e.printStackTrace();
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Error al crear preferencia de pago");
+            error.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(error);
+        }
+    }
+
+    // Actualizar estado de pago (para webhook)
+    @PostMapping("/update-status/{paymentId}")
+    public ResponseEntity<?> updatePaymentStatus(@PathVariable Long paymentId, 
+                                                @RequestBody Map<String, String> statusUpdate) {
+        try {
+            Optional<Payment> paymentOpt = paymentRepository.findById(paymentId);
+            if (paymentOpt.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            Payment payment = paymentOpt.get();
+            String newStatus = statusUpdate.get("status");
+            
+            // Mapear estados de MercadoPago a PaymentStatus
+            PaymentStatus paymentStatus;
+            switch (newStatus.toUpperCase()) {
+                case "APPROVED":
+                    paymentStatus = PaymentStatus.APPROVED;
+                    break;
+                case "REJECTED":
+                    paymentStatus = PaymentStatus.REJECTED;
+                    break;
+                case "CANCELLED":
+                    paymentStatus = PaymentStatus.CANCELLED;
+                    break;
+                case "PENDING":
+                    paymentStatus = PaymentStatus.PENDING;
+                    break;
+                case "IN_PROCESS":
+                    paymentStatus = PaymentStatus.IN_PROCESS;
+                    break;
+                default:
+                    paymentStatus = PaymentStatus.PENDING;
+            }
+
+            payment.setPaymentStatus(paymentStatus);
+            if (paymentStatus == PaymentStatus.APPROVED) {
+                payment.setPaymentDate(LocalDateTime.now());
+            }
+
+            paymentRepository.save(payment);
+
+            // Actualizar estado de la orden si el pago fue exitoso
+            if (paymentStatus == PaymentStatus.APPROVED) {
+                Order order = payment.getOrder();
+                order.setStatus(org.mc.mcronalds.model.OrderStatus.CONFIRMED);
+                orderRepository.save(order);
+            }
+
+            return ResponseEntity.ok(Map.of("message", "Estado actualizado correctamente"));
+            
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Error al actualizar estado del pago");
+            error.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(error);
         }
     }
 }

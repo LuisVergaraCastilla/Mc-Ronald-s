@@ -1,0 +1,78 @@
+/* Layout general */
+.admin-layout {
+  display: flex;
+}
+
+/* Contenido del panel, separado del sidebar */
+.admin-content {
+  margin-left: 250px; /* ancho del sidebar */
+  padding: 30px;
+  width: calc(100% - 250px);
+}
+
+.admin-title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+/* Botón crear */
+.btn-crear {
+  background-color: #e5133a;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.btn-crear:hover {
+  background-color: #c90f32;
+}
+
+/* Tabla */
+.tabla-productos {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla-productos th,
+.tabla-productos td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+.tabla-productos th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+/* Botones accion */
+.btn-editar {
+  background-color: #1a73e8;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  margin-right: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.btn-editar:hover {
+  background-color: #125fc7;
+}
+
+.btn-eliminar {
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.btn-eliminar:hover {
+  background-color: #b51f1f;
+}

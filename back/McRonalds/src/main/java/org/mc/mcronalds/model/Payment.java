@@ -28,7 +28,8 @@ public class Payment {
 
     private String paymentMethod;
 
-    private String paymentStatus;
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
 
     @ManyToOne
     @JoinColumn(name = "idOrder")
