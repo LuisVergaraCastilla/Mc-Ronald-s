@@ -105,6 +105,21 @@ public class PaymentController {
 
             Order order = orderOpt.get();
             
+            // Verificar si ya existe un pago pendiente para esta orden
+            List<Payment> existingPayments = paymentRepository.findByOrder(order);
+            for (Payment existingPayment : existingPayments) {
+                if (existingPayment.getPaymentStatus() == PaymentStatus.PENDING) {
+                    // Si ya existe un pago pendiente, retornar la preferencia existente
+                    Map<String, Object> response = new HashMap<>();
+                    response.put("preference_id", existingPayment.getTransactionId());
+                    response.put("init_point", "https://www.mercadopago.com.pe/checkout/v1/redirect?pref_id=" + existingPayment.getTransactionId());
+                    response.put("sandbox_init_point", "https://sandbox.mercadopago.com.pe/checkout/v1/redirect?pref_id=" + existingPayment.getTransactionId());
+                    response.put("payment_id", existingPayment.getIdPayment());
+                    response.put("message", "Ya existe un pago pendiente para esta orden");
+                    return ResponseEntity.ok(response);
+                }
+            }
+            
             // Crear request para MercadoPago
             MercadoPreferenceRequest request = new MercadoPreferenceRequest();
             request.setId(order.getIdOrder().toString());
@@ -117,7 +132,7 @@ public class PaymentController {
             // Crear preferencia en MercadoPago
             Preference preference = mercadoPagoService.createPreference(request);
             
-            // Crear registro de pago en base de datos
+            // Crear registro de pago en base de datos ANTES de retornar la respuesta
             Payment payment = Payment.builder()
                     .order(order)
                     .amount(order.getTotalAmount())
@@ -127,17 +142,22 @@ public class PaymentController {
                     .paymentDate(LocalDateTime.now())
                     .build();
             
-            paymentRepository.save(payment);
+            // Guardar el pago en la base de datos
+            Payment savedPayment = paymentRepository.save(payment);
+            System.out.println("✅ Payment creado en BD con ID: " + savedPayment.getIdPayment() + " para orden: " + orderId);
 
             Map<String, Object> response = new HashMap<>();
             response.put("preference_id", preference.getId());
             response.put("init_point", preference.getInitPoint());
             response.put("sandbox_init_point", preference.getSandboxInitPoint());
-            response.put("payment_id", payment.getIdPayment());
+            response.put("payment_id", savedPayment.getIdPayment());
+            response.put("external_reference", order.getIdOrder().toString());
             
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
+            System.err.println("❌ Error al crear preferencia de pago: " + e.getMessage());
+            e.printStackTrace();
             Map<String, String> error = new HashMap<>();
             error.put("error", "Error al crear preferencia de pago");
             error.put("message", e.getMessage());
