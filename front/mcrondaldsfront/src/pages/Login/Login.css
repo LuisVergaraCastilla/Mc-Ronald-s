@@ -1,0 +1,128 @@
+/* CONTENEDOR GENERAL */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #eb3349, #f45c43);
+    padding: 20px;
+}
+
+/* CAJA DEL LOGIN */
+.login-box {
+    background: #fff;
+    padding: 40px 35px;
+    border-radius: 16px;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    animation: fadeIn 0.4s ease;
+}
+
+.login-title {
+    text-align: center;
+    margin-bottom: -10px;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.login-subtitle {
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+/* GRUPO DE INPUTS CON LABEL FLOTANTE */
+.input-group {
+    position: relative;
+    width: 100%;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 10px;
+    padding-top: 18px;
+    font-size: 1rem;
+    border: 1.8px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.25s ease;
+    background: transparent;
+}
+
+.input-group input:focus {
+    border-color: #e5133a;
+    box-shadow: 0 0 6px rgba(229, 19, 58, 0.25);
+}
+
+/* LABEL FLOTANTE */
+.input-group label {
+    position: absolute;
+    left: 10px;
+    top: 14px;
+    color: #777;
+    font-size: 1rem;
+    pointer-events: none;
+    transition: 0.25s ease;
+}
+
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label,
+.input-group input:valid + label {
+    top: -7px;
+    font-size: 0.85rem;
+    background: white;
+    padding: 0 5px;
+    color: #e5133a;
+}
+
+/* BOTÓN */
+.btn-login {
+    padding: 12px;
+    font-size: 1.1rem;
+    background: #e5133a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.25s ease;
+}
+
+.btn-login:hover {
+    opacity: 0.9;
+}
+
+
+/* FOOTER */
+.login-footer {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.login-footer span {
+    color: #e5133a;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 5px;
+    transition: 0.2s;
+}
+
+.login-footer span:hover {
+    text-decoration: underline;
+}
+
+/* ANIMACIÓN */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
